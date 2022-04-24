@@ -13,9 +13,6 @@ function installer
         echo no
         end 
 end
-function cleanup
-    rm e-log.log 2>/dev/null
-end
 function helper
     echo "use: fish E-forensics.fish /location/email.eml"
 end
@@ -36,9 +33,7 @@ if test ! -n "$argv[1]"
 #testing if file contains email strings
 if test (rg -N '^Subject: ' "$argv[1]" |cut -f2 -d ":" |sed 's/^ //')
     set var_checksum "ok"
-    cleanup
     else
-    cleanup
     echo file is not a valid type, exiting...
     exit 1
     end
@@ -49,7 +44,6 @@ if test $var_checksum = "ok"
     echo "Dkim Status     :" (rg -N -o 'dkim=(pass|fail)' "$argv[1]" |strings |cut -f1 -d " " |head -n1 |sed 's/dkim=//')
     echo "Dmarc Status    :" (rg -N -o 'dmarc=.*$' "$argv[1]" |tr -d ";" |sed s'/dmarc=//' |cut -f1 -d " " |head -n1)
     echo "SPF Status      :" (rg -N -o 'spf=(none|pass|fail)' "$argv[1]" |strings |sed 's/spf=//' |cut -f1 -d " " |head -n1)
-    #DTG
     echo "DTG             :" (rg -N -o '(Mon|Tue|Wed|Thu|Fri|Sat|Sun).*[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}' "$argv[1]" |head -n1)
     echo "Dkim Signature  :" (rg -N '^DKIM-Signature: ' "$argv[1]" |tr -d ";" |sed 's/DKIM-Signature://' |sed 's/^ //' |head -n1)
     echo "Dkim Header     :" (rg -N -o '(header.d=[a-zA-Z0-9]{4,30}\.(org|com|net|xyz|info|ltd|uk|net|co|cc)|d=[a-zA-Z0-9]{4,30}\.(org|com|net|xyz|info|ltd|uk|net|co|cc))' "$argv[1]" |strings |sed 's/header.d=//' |head -n1 |sed 's/d=//')
@@ -78,5 +72,4 @@ if test $var_checksum = "ok"
     figlet -w 140 -f digital.flf "Path" | lolcat
     echo "Path Trace      :"
     rg -N -A 4 "^Received: from " "$argv[1]"
-    cleanup
     end
