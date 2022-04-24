@@ -1,5 +1,4 @@
 #!/usr/local/bin/fish
-#Email Header Forensics
 function installer
     if test (which figlet); sleep 0.1;else;sudo apt install -y figlet;end
     if test (which rg); sleep 0.1;else;sudo apt install -y rg;end
@@ -25,6 +24,11 @@ end
 #install checker
 installer
 #arg checker
+if test "$argv[1]" = "--help"
+    logo
+    helper
+    exit 1
+    end
 if test ! -n "$argv[1]"
     logo
     helper
@@ -58,7 +62,7 @@ if test $var_checksum = "ok"
     echo "Recived from    :" (rg -N '^From: ' "$argv[1]" |sed 's/From: //' |tr -d ">" |tr -d "<" |rg -No "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" |head -n1)
     echo "X-PHP-Filename  :" (rg -N '^X-PHP-Filename: ' "$argv[1]" |cut -f2 -d " " |sed 's/^ //' |head -n1)
     echo "X-PHP-Script    :" (rg -N '^X-PHP-Script: ' "$argv[1]" |cut -f2 -d " " |sed 's/^ //' |head -n1)
-    echo "Recieved Subject:" (rg -N '^Subject: ' "$argv[1]" |cut -f2 -d ":" |sed 's/^ //' |head -n1)
+    echo "Recieved Subject:" (rg -N '^Subject: ' "$argv[1]" |cut -f2 -d ":" |sed 's/^ //')
     echo "Recieved details:" (rg -N '^Received: from' "$argv[1]" |sed 's/Received: from//' |sed 's/^ //' |rg -o '(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]' |rg -N -o '.*\.(org|com|net|xyz|info|ltd|uk|net|co|cc)' |sort -u |head -n1)
     echo "Delivered to    :" (rg -N '^Delivered-To:' "$argv[1]" |sed 's/Delivered-To://' |sed 's/^ //' |head -n1)
     echo "Return Path     :" (rg -N '^Return-Path: <' "$argv[1]" |sed 's/Return-Path: <//' |tr -d ">" |head -n1)
