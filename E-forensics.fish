@@ -19,7 +19,7 @@ end
 function logo
     clear
     figlet -w 140 -f cyberlarge.flf "E-forensics" | lolcat
-    echo "                         email source forensics tool that extracts key information"
+    echo "                        email source forensics tool that extracts key information"
     echo ""
 end
 #install checker
