@@ -22,8 +22,11 @@ function logo
     echo ""
 end
 #install checker
-installer
+
+    installer
+
 #arg checker
+
 if test "$argv[1]" = "--help"
     logo
     helper
@@ -35,13 +38,16 @@ if test ! -n "$argv[1]"
     exit 1
     end
 #testing if file contains email strings
+
 if test (rg -N '^Subject: ' "$argv[1]" |cut -f2 -d ":" |sed 's/^ //')
     set var_checksum "ok"
     else
     echo file is not a valid type, exiting...
     exit 1
     end
+
 #main function of extractions
+
 if test $var_checksum = "ok"
     logo
     figlet -w 140 -f digital.flf "Details" | lolcat
