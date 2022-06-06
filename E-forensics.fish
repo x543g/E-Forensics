@@ -1,7 +1,7 @@
 #!/usr/local/bin/fish
 function installer
     if test (which figlet); sleep 0.1;else;sudo apt install -y figlet;end
-    if test (which rg); sleep 0.1;else;sudo apt install -y rg;end
+    if test (which rg); sleep 0.1;else;sudo apt install -y ripgrep;end
     if test (which lolcat); sleep 0.1;else;sudo apt install -y lolcat;end
     if test (which exiftool); sleep 0.1;else;sudo apt install -y exiftool;end
     if test -f digital.flf; sleep 0.1;else
